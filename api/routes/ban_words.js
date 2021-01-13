@@ -1,6 +1,7 @@
 const router = require("express").Router()
 const Words = require("../models/ban_words")
 
+
 //post new ban word
 router.post("/", async (req, res) => {
     //check if word is exist 

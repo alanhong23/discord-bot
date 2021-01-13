@@ -5,9 +5,11 @@ const Channel_role = require("../models/channel_role")
 //post new message
 router.post("/", async (req,res) => {
 
+    //check if the channel already has a channel role
     const exist_channel_id = Channel_role.findOne({ channel_id: req.body.channel_id })
     if (exist_channel_id) return res.status(400).send({ message: "channel id exist" })
 
+    //create new channel role proototype
     const channel_role = new Channel_role({
         message_id: req.body.message_id,
         channel_role_id: req.body.channel_role_id,
@@ -24,6 +26,7 @@ router.post("/", async (req,res) => {
 })
 
 
+//get specific channel role information
 router.get("/", async (req,res) => {
     id = req.query.message_id
 
@@ -38,6 +41,7 @@ router.get("/", async (req,res) => {
 })
 
 
+//delete the channel role information along with the message
 router.delete("/", async (req,res) => {
     mes_id = req.query.message_id
 

@@ -2,14 +2,18 @@ const Delete_message = require("../models/delete_message")
 const router = require("express").Router()
 
 
+//post new delete channel information
 router.post("/", async (req, res) => {
 
+    //check if the channel already exist
     const exist_channel_id = await Delete_message.findOne({ channel_id: req.body.channel_id })
     if (exist_channel_id) return res.status(400).send({ message: "this channel already is deleted message channel" })
 
+    //check if the server already has a delete message channel
     const exist_guild_id = await Delete_message.findOne({ guild_id: req.body.guild_id })
     if (exist_guild_id) return res.status(400).send({ message: "this server already had a deleted message channel" })
 
+    //create new delete message prototype
     const channel_information = new Delete_message({
         channel_id: req.body.channel_id,
         guild_id: req.body.guild_id
@@ -24,6 +28,7 @@ router.post("/", async (req, res) => {
 })
 
 
+//get specific server information
 router.get("/", async (req, res) => {
 
     const channel = await Delete_message.findOne({ guild_id: req.query.guild_id })
@@ -37,6 +42,7 @@ router.get("/", async (req, res) => {
 })
 
 
+//delete specific server information
 router.delete("/", async (req, res) => {
     const chan_id = req.query.channel_id
     const gui_id = req.query.guild_id
