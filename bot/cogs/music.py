@@ -80,7 +80,7 @@ class YTDLSource(discord.PCMVolumeTransformer):
         data = await loop.run_in_executor(None, partial)
 
         if data is None:
-            raise YTDLError('Couldn\'t find anything that matches `{}`'.format(search))
+            raise YTDLError(f'Couldn\'t find anything that matches `{search}`')
 
         if 'entries' not in data:
             process_info = data
@@ -92,14 +92,14 @@ class YTDLSource(discord.PCMVolumeTransformer):
                     break
 
             if process_info is None:
-                raise YTDLError('Couldn\'t find anything that matches `{}`'.format(search))
+                raise YTDLError(f'Couldn\'t find anything that matches `{search}`')
 
         webpage_url = process_info['webpage_url']
         partial = functools.partial(cls.ytdl.extract_info, webpage_url, download=False)
         processed_info = await loop.run_in_executor(None, partial)
 
         if processed_info is None:
-            raise YTDLError('Couldn\'t fetch `{}`'.format(webpage_url))
+            raise YTDLError(f'Couldn\'t fetch `{webpage_url}`')
 
         if 'entries' not in processed_info:
             info = processed_info
@@ -109,7 +109,7 @@ class YTDLSource(discord.PCMVolumeTransformer):
                 try:
                     info = processed_info['entries'].pop(0)
                 except IndexError:
-                    raise YTDLError('Couldn\'t retrieve any matches for `{}`'.format(webpage_url))
+                    raise YTDLError(f"Couldn't retrieve any matches for `{webpage_url}`")
 
         return cls(ctx, discord.FFmpegPCMAudio(info['url'], **cls.FFMPEG_OPTIONS), data=info)
 
@@ -121,13 +121,13 @@ class YTDLSource(discord.PCMVolumeTransformer):
 
         duration = []
         if days > 0:
-            duration.append('{} days'.format(days))
+            duration.append(f'{days} days')
         if hours > 0:
-            duration.append('{} hours'.format(hours))
+            duration.append(f'{hours} hours')
         if minutes > 0:
-            duration.append('{} minutes'.format(minutes))
+            duration.append(f'{minutes} minutes')
         if seconds > 0:
-            duration.append('{} seconds'.format(seconds))
+            duration.append(f'{seconds} seconds')
 
         return ', '.join(duration)
 
@@ -141,16 +141,15 @@ class Song:
 
     def create_embed(self):
         embed = (
-          discord.Embed(
-              title='Now playing',
-              description='```{0.source.title}\n```'.format(self),
-              color=discord.Color.random()
-            )
-            .add_field(name='Duration', value=self.source.duration)
-            .add_field(name='Requested by', value=self.requester.mention)
-            .add_field(name='Uploader', value='[{0.source.uploader}]({0.source.uploader_url})'.format(self))
-            .add_field(name='URL', value='[Click]({0.source.url})'.format(self))
-            .set_thumbnail(url=self.source.thumbnail)
+            discord.Embed(
+
+                title="Now Playing",
+                description=f'[{self.source.title}]({self.source.url})'
+
+            ).add_field(name='Duration', value=f"\n{self.source.duration}\n")
+             .add_field(name='Uploader', value=f'[{self.source.uploader}]({self.source.uploader_url})')
+             .set_footer(text=self.requester.name, icon_url=self.requester.avatar_url)
+             .set_thumbnail(url=self.source.thumbnail)
         )
 
         return embed
