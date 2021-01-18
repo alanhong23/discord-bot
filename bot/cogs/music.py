@@ -142,13 +142,12 @@ class Song:
     def create_embed(self):
         embed = (
             discord.Embed(
-
-                title="Now Playing",
+                
                 description=f'[{self.source.title}]({self.source.url})'
 
             ).add_field(name='Duration', value=f"\n{self.source.duration}\n")
              .add_field(name='Uploader', value=f'[{self.source.uploader}]({self.source.uploader_url})')
-             .set_footer(text=self.requester.name, icon_url=self.requester.avatar_url)
+             .set_author(text="Now Playing", icon_url=self.requester.avatar_url)
              .set_thumbnail(url=self.source.thumbnail)
         )
 
