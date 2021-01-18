@@ -12,7 +12,8 @@ cogs = [
     "cogs.ban_word",
     "cogs.channel_role",
     "cogs.help_command",
-    "cogs.deleted_message"
+    "cogs.deleted_message",
+    "cogs.music"
 ]
 
 class Main(commands.AutoShardedBot):
