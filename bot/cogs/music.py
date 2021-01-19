@@ -147,7 +147,7 @@ class Song:
 
             ).add_field(name='Duration', value=f"\n{self.source.duration}\n")
              .add_field(name='Uploader', value=f'[{self.source.uploader}]({self.source.uploader_url})')
-             .set_author(text="Now Playing", icon_url=self.requester.avatar_url)
+             .set_author(name="Now Playing", icon_url=self.requester.avatar_url)
              .set_thumbnail(url=self.source.thumbnail)
         )
 
